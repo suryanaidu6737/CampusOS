@@ -1,0 +1,42 @@
+services:
+  - type: web
+    name: campusos-backend
+    env: node
+    plan: starter
+    region: oregon
+    branch: main
+    repo: https://github.com/suryanaidu6737/CampusOS.git   # actual repo URL
+    rootDir: server
+    buildCommand: "npm install"
+    startCommand: "node index.js"
+    envVars:
+      - key: PORT
+        value: "${PORT}"
+        preview: false
+        visibility: public
+      - key: MONGODB_URI
+        value: "${MONGODB_URI}"
+        preview: false
+        visibility: secret
+      - key: JWT_SECRET
+        value: "${JWT_SECRET}"
+        preview: false
+        visibility: secret
+      - key: RESEND_API_KEY
+        value: "${RESEND_API_KEY}"
+        preview: false
+        visibility: secret
+      - key: EMAIL_FROM
+        value: "${EMAIL_FROM}"
+        preview: false
+        visibility: public
+  - type: static
+    name: campusos-frontend
+    env: static
+    plan: starter
+    region: oregon
+    branch: main
+    repo: https://github.com/suryanaidu6737/CampusOS.git   # actual repo URL
+    rootDir: client
+    publishPath: dist
+    buildCommand: "npm install && npm run build"
