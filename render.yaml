@@ -1,11 +1,11 @@
 services:
   - type: web
     name: campusos-backend
-    env: node
+    runtime: node
     plan: starter
     region: oregon
     branch: main
-    repo: https://github.com/suryanaidu6737/CampusOS.git   # actual repo URL
+    repo: https://github.com/suryanaidu6737/CampusOS.git
     rootDir: server
     buildCommand: "npm install"
     startCommand: "node index.js"
@@ -30,13 +30,18 @@ services:
         value: "${EMAIL_FROM}"
         preview: false
         visibility: public
-  - type: static
+  - type: web
     name: campusos-frontend
-    env: static
+    runtime: static
     plan: starter
     region: oregon
     branch: main
-    repo: https://github.com/suryanaidu6737/CampusOS.git   # actual repo URL
+    repo: https://github.com/suryanaidu6737/CampusOS.git
     rootDir: client
-    publishPath: dist
     buildCommand: "npm install && npm run build"
+    staticPublishPath: dist
+    # SPA rewrite for React/Vite
+    routes:
+      - source: "/*"
+        destination: "/index.html"
+        type: rewrite
