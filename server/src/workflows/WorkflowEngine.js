@@ -37,6 +37,19 @@ export class WorkflowEngine {
       throw new Error(`Workflow template '${workflowKey}' not found or inactive`);
     }
 
+    // Idempotency / Anti-duplicate Safeguard: Check for identical submission in last 2 minutes
+    const twoMinutesAgo = new Date(Date.now() - 2 * 60 * 1000);
+    const existingRecent = await Request.findOne({
+      userId: user._id,
+      workflowId: workflow._id,
+      status: { $in: ['SUBMITTED', 'PENDING_INFO', 'UNDER_REVIEW'] },
+      createdAt: { $gte: twoMinutesAgo },
+    });
+    if (existingRecent) {
+      console.log(`[WorkflowEngine] Idempotency safeguard matched recent request ${existingRecent.requestNumber}`);
+      return existingRecent;
+    }
+
     // Resolve target department from workflow template
     let targetDept = null;
     if (workflow.responsibleDepartmentCode) {

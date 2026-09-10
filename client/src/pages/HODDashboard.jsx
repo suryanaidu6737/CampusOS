@@ -74,9 +74,6 @@ export const HODDashboard = () => {
           <h1 className="text-2xl font-black text-white mt-1 tracking-tight">
             Welcome, {user?.name}
           </h1>
-          <p className="text-xs text-slate-300 mt-1">
-            Department oversight, executive workflow approvals, and department-level operational metrics.
-          </p>
         </div>
 
         <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-2xl border border-white/10">

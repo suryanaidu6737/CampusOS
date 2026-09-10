@@ -93,32 +93,10 @@ export const Sidebar = () => {
           </nav>
         </div>
 
-        {/* Enterprise System Info */}
-        <div className="bg-slate-800/60 rounded-xl p-3 border border-slate-700/50 space-y-1.5">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[11px] font-bold text-slate-200">Shared System Status</span>
-          </div>
-          <div className="space-y-1 text-[10px] text-slate-400 font-mono">
-            <div className="flex items-center justify-between">
-              <span>Backend API</span>
-              <span className="text-emerald-400 font-bold">Online</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span>AI Agentic Engine</span>
-              <span className="text-emerald-400 font-bold">Active</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span>RBAC Policy</span>
-              <span className="text-emerald-400 font-bold">Strict</span>
-            </div>
-          </div>
-        </div>
       </div>
 
       <div className="pt-4 border-t border-slate-800 text-center">
-        <p className="text-[10px] text-slate-400 font-mono font-bold">CampusOS AI v2.0 Enterprise</p>
-        <p className="text-[9px] text-slate-500">Role-Based SaaS Architecture</p>
+        <p className="text-[10px] text-slate-400 font-bold">CampusOS</p>
       </div>
     </aside>
   );

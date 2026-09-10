@@ -11,7 +11,7 @@ const requestSchema = new mongoose.Schema(
     extractedData: { type: mongoose.Schema.Types.Mixed, default: {} },
     status: {
       type: String,
-      enum: ['SUBMITTED', 'PENDING_INFO', 'UNDER_REVIEW', 'APPROVED', 'REJECTED', 'ESCALATED', 'COMPLETED', 'CANCELLED'],
+      enum: ['SUBMITTED', 'ASSIGNED', 'UNDER_REVIEW', 'IN_REVIEW', 'PENDING_APPROVAL', 'APPROVED', 'REJECTED', 'IN_PROGRESS', 'RESOLVED', 'COMPLETED', 'PENDING_INFO', 'ESCALATED', 'CANCELLED'],
       default: 'SUBMITTED',
     },
     priority: { type: String, enum: ['LOW', 'NORMAL', 'HIGH', 'URGENT'], default: 'NORMAL' },

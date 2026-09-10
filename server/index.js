@@ -15,6 +15,7 @@ import workflowRoutes from './src/routes/workflowRoutes.js';
 import departmentRoutes from './src/routes/departmentRoutes.js';
 import notificationRoutes from './src/routes/notificationRoutes.js';
 import analyticsRoutes from './src/routes/analyticsRoutes.js';
+import institutionRoutes from './src/routes/institutionRoutes.js';
 
 
 const app = express();
@@ -38,6 +39,8 @@ app.use('/api/workflows', workflowRoutes);
 app.use('/api/departments', departmentRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/analytics', analyticsRoutes);
+app.use('/api/institution', institutionRoutes);
+
 
 // Global Error Handler (Hides raw stack traces in production)
 app.use((err, req, res, next) => {

@@ -1,5 +1,5 @@
 import express from 'express';
-import { register, login, getMe, getUsers, activateAccount } from '../controllers/authController.js';
+import { register, login, getMe, getUsers, activateAccount, updateUserAccountStatus } from '../controllers/authController.js';
 import { validateImportUsers, executeImportUsers } from '../controllers/userImportController.js';
 import {
   sendActivationEmailToUser,
@@ -22,6 +22,7 @@ router.post('/activation/complete', verifyAndActivateAccount);
 
 router.get('/me', protect, getMe);
 router.get('/users', protect, authorizeRoles('ADMIN'), getUsers);
+router.patch('/users/:id/status', protect, authorizeRoles('ADMIN'), updateUserAccountStatus);
 
 // Admin CSV Import Routes
 router.post('/users/import-validate', protect, authorizeRoles('ADMIN'), validateImportUsers);
@@ -31,3 +32,4 @@ router.post('/users/import-execute', protect, authorizeRoles('ADMIN'), executeIm
 router.post('/users/:id/send-activation-email', protect, authorizeRoles('ADMIN'), sendActivationEmailToUser);
 
 export default router;
+

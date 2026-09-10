@@ -45,8 +45,7 @@ export const StaffRequestsPage = () => {
   return (
     <div className="space-y-6 pb-12">
       <div>
-        <h1 className="text-2xl font-black text-slate-900 tracking-tight">Department Review Queue</h1>
-        <p className="text-xs text-slate-500">Authorized requests for {user?.department?.name || 'Central Campus'}</p>
+        <h1 className="text-2xl font-black text-slate-900 tracking-tight">Department Queue</h1>
       </div>
 
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">

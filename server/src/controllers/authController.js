@@ -210,3 +210,45 @@ export const getUsers = async (req, res) => {
   }
 };
 
+export const updateUserAccountStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { accountStatus } = req.body;
+
+    if (!['ACTIVE', 'SUSPENDED', 'PENDING_ACTIVATION'].includes(accountStatus)) {
+      return res.status(400).json({ success: false, message: 'Invalid account status provided' });
+    }
+
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    user.accountStatus = accountStatus;
+    user.isActive = accountStatus !== 'SUSPENDED';
+    await user.save();
+
+    await AuditLog.create({
+      institutionId: req.user.institutionId || null,
+      userId: req.user._id,
+      action: 'ADMIN_UPDATE_USER_STATUS',
+      metadata: { targetUserId: user._id, targetEmail: user.email, newStatus: accountStatus },
+    });
+
+    res.json({
+      success: true,
+      message: `Account status updated to ${accountStatus}`,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        accountStatus: user.accountStatus,
+        isActive: user.isActive,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+

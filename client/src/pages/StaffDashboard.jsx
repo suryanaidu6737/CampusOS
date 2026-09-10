@@ -97,9 +97,6 @@ export const StaffDashboard = () => {
             <span className="text-slate-300 text-xs font-semibold">• Dept: {user?.department?.name || 'Central Campus'}</span>
           </div>
           <h1 className="text-2xl font-black text-white mt-1 tracking-tight">{roleTitle}</h1>
-          <p className="text-xs text-slate-300 mt-1">
-            Authorized portal for reviewing, approving, rejecting, or escalating campus workflow requests.
-          </p>
         </div>
 
         <button

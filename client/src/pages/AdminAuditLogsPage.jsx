@@ -27,8 +27,7 @@ export const AdminAuditLogsPage = () => {
   return (
     <div className="space-y-6 pb-12">
       <div>
-        <h1 className="text-2xl font-black text-slate-900 tracking-tight">System Audit Logs & Requests Registry</h1>
-        <p className="text-xs text-slate-500">System-wide persistent logs of all university workflow executions</p>
+        <h1 className="text-2xl font-black text-slate-900 tracking-tight">Audit Logs</h1>
       </div>
 
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">

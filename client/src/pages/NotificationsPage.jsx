@@ -41,8 +41,7 @@ export const NotificationsPage = () => {
             <Bell className="w-5 h-5" />
           </div>
           <div>
-            <h1 className="text-xl font-black text-slate-900">Notifications & Alerts</h1>
-            <p className="text-xs text-slate-500">Real-time workflow progression updates</p>
+            <h1 className="text-xl font-black text-slate-900">Notifications</h1>
           </div>
         </div>
         <button onClick={fetchNotifications} className="text-xs text-brand-600 font-bold hover:underline">

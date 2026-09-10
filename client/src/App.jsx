@@ -25,6 +25,7 @@ import { AdminUsersPage } from './pages/AdminUsersPage';
 import { AdminDepartmentsPage } from './pages/AdminDepartmentsPage';
 import { AdminWorkflowsPage } from './pages/AdminWorkflowsPage';
 import { AdminAuditLogsPage } from './pages/AdminAuditLogsPage';
+import { AdminSettingsPage } from './pages/AdminSettingsPage';
 
 // Shared Pages
 import { RequestDetailPage } from './pages/RequestDetailPage';
@@ -116,7 +117,8 @@ const ProtectedLayout = () => {
             <Route path="/admin/requests/:id" element={<RoleGuard allowedRoles={['ADMIN']}><RequestDetailPage /></RoleGuard>} />
             <Route path="/admin/analytics" element={<RoleGuard allowedRoles={['ADMIN']}><AdminDashboard /></RoleGuard>} />
             <Route path="/admin/audit-logs" element={<RoleGuard allowedRoles={['ADMIN']}><AdminAuditLogsPage /></RoleGuard>} />
-            <Route path="/admin/settings" element={<RoleGuard allowedRoles={['ADMIN']}><UserProfilePage /></RoleGuard>} />
+            <Route path="/admin/settings" element={<RoleGuard allowedRoles={['ADMIN']}><AdminSettingsPage /></RoleGuard>} />
+
 
             {/* General Routes */}
             <Route path="/requests/:id" element={<RequestDetailPage />} />

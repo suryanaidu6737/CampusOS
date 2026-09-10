@@ -37,8 +37,7 @@ export const StudentRequestsPage = () => {
     <div className="space-y-6 pb-12">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-black text-slate-900 tracking-tight">My Campus Workflows & Requests</h1>
-          <p className="text-xs text-slate-500">Track and monitor all your submitted natural-language requests</p>
+          <h1 className="text-2xl font-black text-slate-900 tracking-tight">My Requests</h1>
         </div>
 
         <div className="relative w-full md:w-72">

@@ -75,6 +75,18 @@ export const AdminUsersPage = () => {
     }
   };
 
+  const handleToggleUserStatus = async (user) => {
+    try {
+      const nextStatus = user.accountStatus === 'SUSPENDED' ? 'ACTIVE' : 'SUSPENDED';
+      const res = await API.patch(`/auth/users/${user._id}/status`, { accountStatus: nextStatus });
+      if (res.data.success) {
+        fetchUsers();
+      }
+    } catch (err) {
+      console.error('Failed to toggle user status', err);
+    }
+  };
+
   const filteredUsers = users.filter((u) => {
     const matchesSearch =
       u.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -85,6 +97,8 @@ export const AdminUsersPage = () => {
     let matchesTab = true;
     if (activeTab === 'STUDENT') matchesTab = u.role === 'STUDENT';
     else if (activeTab === 'FACULTY') matchesTab = u.role === 'FACULTY';
+    else if (activeTab === 'STAFF') matchesTab = u.role === 'STAFF';
+    else if (activeTab === 'HOD') matchesTab = u.role === 'HOD';
     else if (activeTab === 'PENDING') matchesTab = u.accountStatus === 'PENDING_ACTIVATION';
 
     return matchesSearch && matchesTab;
@@ -93,16 +107,15 @@ export const AdminUsersPage = () => {
   const pendingCount = users.filter((u) => u.accountStatus === 'PENDING_ACTIVATION').length;
   const studentCount = users.filter((u) => u.role === 'STUDENT').length;
   const facultyCount = users.filter((u) => u.role === 'FACULTY').length;
+  const staffCount = users.filter((u) => u.role === 'STAFF').length;
+  const hodCount = users.filter((u) => u.role === 'HOD').length;
 
   return (
     <div className="space-y-6 pb-12">
       {/* Header Bar */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-black text-slate-900 tracking-tight">System User Directory</h1>
-          <p className="text-xs text-slate-500">
-            Global account management, role assignments, and email-based activation
-          </p>
+          <h1 className="text-2xl font-black text-slate-900 tracking-tight">Users</h1>
         </div>
 
         <div className="flex flex-col sm:flex-row items-center gap-2 w-full md:w-auto">
@@ -128,10 +141,10 @@ export const AdminUsersPage = () => {
       </div>
 
       {/* Sub-Navigation Filter Tabs */}
-      <div className="flex items-center gap-2 border-b border-slate-200 pb-2">
+      <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 pb-2">
         <button
           onClick={() => setActiveTab('ALL')}
-          className={`px-4 py-2 text-xs font-bold rounded-xl transition flex items-center gap-2 ${
+          className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition flex items-center gap-1.5 ${
             activeTab === 'ALL'
               ? 'bg-slate-900 text-white shadow-md'
               : 'text-slate-600 hover:bg-slate-100'
@@ -143,7 +156,7 @@ export const AdminUsersPage = () => {
 
         <button
           onClick={() => setActiveTab('STUDENT')}
-          className={`px-4 py-2 text-xs font-bold rounded-xl transition flex items-center gap-2 ${
+          className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition flex items-center gap-1.5 ${
             activeTab === 'STUDENT'
               ? 'bg-brand-600 text-white shadow-md'
               : 'text-slate-600 hover:bg-slate-100'
@@ -155,7 +168,7 @@ export const AdminUsersPage = () => {
 
         <button
           onClick={() => setActiveTab('FACULTY')}
-          className={`px-4 py-2 text-xs font-bold rounded-xl transition flex items-center gap-2 ${
+          className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition flex items-center gap-1.5 ${
             activeTab === 'FACULTY'
               ? 'bg-purple-600 text-white shadow-md'
               : 'text-slate-600 hover:bg-slate-100'
@@ -166,8 +179,32 @@ export const AdminUsersPage = () => {
         </button>
 
         <button
+          onClick={() => setActiveTab('STAFF')}
+          className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition flex items-center gap-1.5 ${
+            activeTab === 'STAFF'
+              ? 'bg-amber-600 text-white shadow-md'
+              : 'text-slate-600 hover:bg-slate-100'
+          }`}
+        >
+          <UserCheck className="w-3.5 h-3.5" />
+          <span>Staff ({staffCount})</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('HOD')}
+          className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition flex items-center gap-1.5 ${
+            activeTab === 'HOD'
+              ? 'bg-rose-600 text-white shadow-md'
+              : 'text-slate-600 hover:bg-slate-100'
+          }`}
+        >
+          <UserCheck className="w-3.5 h-3.5" />
+          <span>HODs ({hodCount})</span>
+        </button>
+
+        <button
           onClick={() => setActiveTab('PENDING')}
-          className={`px-4 py-2 text-xs font-bold rounded-xl transition flex items-center gap-2 ${
+          className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition flex items-center gap-1.5 ${
             activeTab === 'PENDING'
               ? 'bg-amber-500 text-white shadow-md'
               : 'text-slate-600 hover:bg-slate-100'
@@ -198,6 +235,7 @@ export const AdminUsersPage = () => {
               <tbody className="divide-y divide-slate-100 font-medium">
                 {filteredUsers.map((u) => {
                   const isPending = u.accountStatus === 'PENDING_ACTIVATION';
+                  const isSuspended = u.accountStatus === 'SUSPENDED';
                   const instId = u.studentId || u.employeeId || 'N/A';
                   const emailStatus = u.activationEmailStatus || 'NOT_SENT';
 
@@ -238,6 +276,11 @@ export const AdminUsersPage = () => {
                           <span className="inline-flex items-center gap-1 text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">
                             <Clock className="w-3 h-3 text-amber-600" />
                             <span>Pending Activation</span>
+                          </span>
+                        ) : isSuspended ? (
+                          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md border border-rose-200">
+                            <ShieldAlert className="w-3 h-3" />
+                            <span>Suspended</span>
                           </span>
                         ) : (
                           <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
@@ -282,19 +325,34 @@ export const AdminUsersPage = () => {
                       </td>
 
                       <td className="py-3 px-3 text-right">
-                        {isPending && (
-                          <button
-                            onClick={() => {
-                              setSelectedUserForEmail(u);
-                              setEmailSuccessMsg('');
-                              setEmailErrorMsg('');
-                            }}
-                            className="px-3 py-1.5 text-[11px] font-bold rounded-xl bg-brand-50 text-brand-700 hover:bg-brand-100 border border-brand-200 transition inline-flex items-center gap-1.5"
-                          >
-                            <Send className="w-3 h-3" />
-                            <span>{emailStatus === 'SENT' ? 'Resend Activation Email' : 'Send Activation Email'}</span>
-                          </button>
-                        )}
+                        <div className="flex items-center justify-end gap-2">
+                          {isPending && (
+                            <button
+                              onClick={() => {
+                                setSelectedUserForEmail(u);
+                                setEmailSuccessMsg('');
+                                setEmailErrorMsg('');
+                              }}
+                              className="px-3 py-1.5 text-[11px] font-bold rounded-xl bg-brand-50 text-brand-700 hover:bg-brand-100 border border-brand-200 transition inline-flex items-center gap-1.5"
+                            >
+                              <Send className="w-3 h-3" />
+                              <span>{emailStatus === 'SENT' ? 'Resend Email' : 'Send Email'}</span>
+                            </button>
+                          )}
+
+                          {u.role !== 'ADMIN' && (
+                            <button
+                              onClick={() => handleToggleUserStatus(u)}
+                              className={`px-3 py-1.5 text-[11px] font-bold rounded-xl transition inline-flex items-center gap-1 border ${
+                                isSuspended
+                                  ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border-emerald-200'
+                                  : 'bg-rose-50 text-rose-700 hover:bg-rose-100 border-rose-200'
+                              }`}
+                            >
+                              {isSuspended ? 'Reactivate' : 'Suspend'}
+                            </button>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   );
@@ -303,6 +361,7 @@ export const AdminUsersPage = () => {
             </table>
           </div>
         )}
+
       </div>
 
       {/* Send Activation Email Confirmation Modal */}

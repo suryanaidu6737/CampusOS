@@ -9,13 +9,22 @@ import {
   ShieldCheck,
   Activity,
   Layers,
-  Sparkles,
+  GraduationCap,
+  Briefcase,
+  UserCheck,
+  Award,
+  Clock,
+  CheckCircle2,
+  AlertCircle,
+  FileText,
 } from 'lucide-react';
 
 export const AdminDashboard = () => {
   const [stats, setStats] = useState(null);
   const [workflows, setWorkflows] = useState([]);
   const [departments, setDepartments] = useState([]);
+  const [recentActivity, setRecentActivity] = useState([]);
+  const [recentRequests, setRecentRequests] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -27,8 +36,10 @@ export const AdminDashboard = () => {
           API.get('/departments'),
         ]);
         setStats(resAnalytics.data.stats);
-        setWorkflows(resWf.data.workflows);
-        setDepartments(resDept.data.departments);
+        setWorkflows(resWf.data.workflows || []);
+        setDepartments(resDept.data.departments || []);
+        setRecentActivity(resAnalytics.data.recentActivity || []);
+        setRecentRequests(resAnalytics.data.recentRequests || []);
       } catch (err) {
         console.error('Failed to load admin analytics', err);
       } finally {
@@ -49,11 +60,8 @@ export const AdminDashboard = () => {
             </span>
           </div>
           <h1 className="text-2xl font-black text-white mt-1 tracking-tight">
-            CampusOS AI Management Platform
+            Admin Dashboard
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
-            Global university workflow management, role permissions, department configuration, and real-time operational metrics.
-          </p>
         </div>
 
         <div className="flex items-center gap-2 bg-slate-800 p-3 rounded-2xl border border-slate-700">
@@ -65,50 +73,148 @@ export const AdminDashboard = () => {
         </div>
       </div>
 
-      {/* Metrics Row */}
+      {/* Primary Metrics Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
-            <Layers className="w-5 h-5" />
+            <GraduationCap className="w-5 h-5" />
           </div>
           <div>
-            <p className="text-[10px] font-bold text-slate-400 uppercase">Total Requests</p>
-            <p className="text-xl font-extrabold text-slate-900">{stats?.totalRequests || 0}</p>
+            <p className="text-[10px] font-bold text-slate-400 uppercase">Total Students</p>
+            <p className="text-xl font-extrabold text-slate-900">{stats?.totalStudents || 0}</p>
           </div>
         </div>
 
         <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold">
-            <Users className="w-5 h-5" />
+            <UserCheck className="w-5 h-5" />
           </div>
           <div>
-            <p className="text-[10px] font-bold text-slate-400 uppercase">Registered Users</p>
-            <p className="text-xl font-extrabold text-slate-900">{stats?.totalUsers || 0}</p>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
-            <Building2 className="w-5 h-5" />
-          </div>
-          <div>
-            <p className="text-[10px] font-bold text-slate-400 uppercase">Departments</p>
-            <p className="text-xl font-extrabold text-slate-900">{stats?.totalDepartments || 0}</p>
+            <p className="text-[10px] font-bold text-slate-400 uppercase">Total Faculty</p>
+            <p className="text-xl font-extrabold text-slate-900">{stats?.totalFaculty || 0}</p>
           </div>
         </div>
 
         <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
-            <GitMerge className="w-5 h-5" />
+            <Briefcase className="w-5 h-5" />
           </div>
           <div>
-            <p className="text-[10px] font-bold text-slate-400 uppercase">Active Workflows</p>
-            <p className="text-xl font-extrabold text-slate-900">{stats?.totalWorkflows || 0}</p>
+            <p className="text-[10px] font-bold text-slate-400 uppercase">Total Staff</p>
+            <p className="text-xl font-extrabold text-slate-900">{stats?.totalStaff || 0}</p>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center font-bold">
+            <Award className="w-5 h-5" />
+          </div>
+          <div>
+            <p className="text-[10px] font-bold text-slate-400 uppercase">Total HODs</p>
+            <p className="text-xl font-extrabold text-slate-900">{stats?.totalHODs || 0}</p>
           </div>
         </div>
       </div>
 
-      {/* Workflow Configuration Templates */}
+      {/* Secondary Metrics Row */}
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
+            <Clock className="w-5 h-5" />
+          </div>
+          <div>
+            <p className="text-[10px] font-bold text-slate-400 uppercase">Pending Requests</p>
+            <p className="text-xl font-extrabold text-slate-900">{stats?.pendingRequests || 0}</p>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+            <GitMerge className="w-5 h-5" />
+          </div>
+          <div>
+            <p className="text-[10px] font-bold text-slate-400 uppercase">Active Workflows</p>
+            <p className="text-xl font-extrabold text-slate-900">
+              {stats?.activeWorkflows || 0} / {stats?.totalWorkflows || 0}
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex items-center gap-3 col-span-2 md:col-span-1">
+          <div className="w-10 h-10 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center font-bold">
+            <Users className="w-5 h-5" />
+          </div>
+          <div>
+            <p className="text-[10px] font-bold text-slate-400 uppercase">Pending Activations</p>
+            <p className="text-xl font-extrabold text-slate-900">{stats?.pendingActivations || 0}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Two Column Section: Recent Activity Audit Feed & Recent Requests */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Recent Audit Activity Feed */}
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="w-5 h-5 text-brand-600" />
+              <h3 className="text-base font-extrabold text-slate-900">Administrative Audit Feed</h3>
+            </div>
+            <span className="text-[10px] font-mono font-bold text-slate-400 uppercase">Latest Actions</span>
+          </div>
+
+          <div className="space-y-3">
+            {recentActivity.length === 0 ? (
+              <p className="text-xs text-slate-400 py-4 text-center">No recent audit log activity found.</p>
+            ) : (
+              recentActivity.map((log) => (
+                <div key={log._id} className="p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-start justify-between text-xs gap-3">
+                  <div>
+                    <span className="font-bold text-slate-900 block">{log.action}</span>
+                    <p className="text-[11px] text-slate-500">
+                      User: {log.userId?.name || 'System'} ({log.userId?.email || 'N/A'})
+                    </p>
+                  </div>
+                  <span className="text-[10px] text-slate-400 font-mono shrink-0">
+                    {new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </span>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        {/* Recent College Requests */}
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <FileText className="w-5 h-5 text-brand-600" />
+              <h3 className="text-base font-extrabold text-slate-900">Recent College Requests</h3>
+            </div>
+            <span className="text-[10px] font-mono font-bold text-slate-400 uppercase">Live Submissions</span>
+          </div>
+
+          <div className="space-y-3">
+            {recentRequests.length === 0 ? (
+              <p className="text-xs text-slate-400 py-4 text-center">No recent requests found.</p>
+            ) : (
+              recentRequests.map((req) => (
+                <div key={req._id} className="p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between text-xs gap-3">
+                  <div>
+                    <p className="font-bold text-slate-900">{req.title || req.category}</p>
+                    <p className="text-[11px] text-slate-500">
+                      Student: {req.studentId?.name || 'Student'} ({req.studentId?.studentId || 'N/A'})
+                    </p>
+                  </div>
+                  <StatusBadge status={req.status} />
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Active Workflow Configuration Engine */}
       <div className="bg-white rounded-2xl border border-slate-200/80 shadow-lg p-6 space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -116,7 +222,7 @@ export const AdminDashboard = () => {
             <h3 className="text-base font-extrabold text-slate-900">Active Workflow Templates Engine</h3>
           </div>
           <span className="text-xs text-emerald-700 font-bold bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
-            4 Core Workflows Loaded
+            {workflows.length} Core Workflows Loaded
           </span>
         </div>
 
@@ -168,3 +274,4 @@ export const AdminDashboard = () => {
     </div>
   );
 };
+
