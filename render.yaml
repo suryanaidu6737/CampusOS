@@ -34,7 +34,6 @@ services:
     name: campusos-frontend
     runtime: static
     plan: starter
-    region: oregon
     branch: main
     repo: https://github.com/suryanaidu6737/CampusOS.git
     rootDir: client
